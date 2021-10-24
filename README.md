@@ -38,6 +38,8 @@ include run.txt
 ![Capturar2](/imagem/Capturar2.PNG)
 ![Capturar4](/imagem/Capturar4.PNG)
 ![Capturar3](/imagem/Capturar3.PNG)
+
+
 (1) A função objetivo é minimizar o atraso na entrega dos produtos.
 (2) Todos os caminhões de chegadas serão descarregados em uma única doca.
 (3) Todos os caminhões de entrega serão carregados em uma única doca.
