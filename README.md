@@ -34,3 +34,18 @@ prometida ponderando a importância de cada cliente (min WT).
 include run.txt
 ```
 ## Modelo Matemático
+(1) A função objetivo é minimizar o atraso na entrega dos produtos.
+(2) Todos os caminhões de chegadas serão descarregados em uma única doca.
+(3) Todos os caminhões de entrega serão carregados em uma única doca.
+(4) Define a ordem de precedência entre os caminhões de chegada.
+(5) e (6) O instante em que o caminhão for descarregado tem que ser maior que o 
+tempo de descarregamento mais a disponibilidade e maior que o tempo de 
+descarga do antecessor.
+(7) Define a ordem de precedência entre os caminhões de saída.
+(8) Define o instante em que o caminhão k sai para entrega.
+(9) Atribuição dos produtos de chegada com os caminhões de saída. 
+(10) O instante que o produto sai para a entrega é maior que o instante que o veículo 
+foi carregado.
+(11) Define o tempo de atraso.
+(12) Restrição de capacidade do caminhão de saída. 
+(13) Todo produto do veículo de entrada deve ser direcionado a um veículo de saíd
