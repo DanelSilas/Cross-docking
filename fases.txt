@@ -1,0 +1,59 @@
+
+##Parametros de definição
+param G:= 99999;  # G número muito grande 
+param n;          # n produtos(n)
+param nv1;        # l caminhão entrada (nv1)
+param nv2;        # k caminhão saída   (nv2)
+param maq1;       # maq1 docas de descarregamento (maq1)
+param maq2;       # maq2 docas de carregamento (maq2)
+
+##Conjuntos
+set K:={1..nv2}; # K conjunto de veículos de saída
+set L:={1..nv1}; # L conjunto de veículos de chegada (entrada)
+set E:={1..n};   # E conjunto de produtos
+set F:={1..maq1};# F conjunto de docas de entrada
+set H:={1..maq2};# H conjunto de docas de saída
+
+##parametros do problema
+param Pc{K} default 0.0 ;  # Pc tempo de processamento de carga (p)
+param Pd{L} default 0.0 ;  # Pd tempo de processamento de descarga (p)
+param C{K} ;               # C capacidade de carga do veículo de entrega (K)
+param r{L} default 0.0 ;   # r data de disponibilidade de veículo de entrega(r)
+param w{E} default 0.0 ;   # w penalidade por atraso (w)
+param d{E} default 0.0 ;   # d data de entrega do produto (d)
+param v{E} default 0.0 ;   # v volume do produto(s)
+param Q{E,L} default 0.0 ; # Q relação entre produtos e caminhões de chegada(s-n x nv1)
+param S{L,K} default 0.0 ; # S relação entre caminhões de chegada e caminhões de saída
+
+##Variáveis de decisão 
+var Zr{L,F}, binary;               # recebe 1 se o veículo'l' de entrada é processada na doca 'f' 
+var Wr{l in L,m in L}, binary;     # recebe 1 se o veículo 'l' precede o veículo 'm' no descarregamento 
+var Zo{K,H},binary;                # recebe 1 se o veículo de saída 'K' é processada na doca 'h'
+var Wo{k in K,q in K}, binary;     # recebe 1 se o veículo 'k' precede o veículo 'q' no carregamento
+
+var Ut{L},>=0; # instante em que o processamento de descarga do veículo 'm' termina 
+var Dt{K},>=0; # instante em que o processamento de carregamento do veículo 'k' termina
+var Dte{E},>=0;# instante em que o produto 'e' sai para entrega 
+var T{E},>=0;  # Tempo de atraso de entrega do produto 'e' 
+
+##função objetivo
+minimize fo: sum{e in E} T[e];
+minimize fo2: sum{e in E} T[e]*w[e];
+
+## restrições do problema 
+s.t. r1{l in L}: sum{f in F} Zr[l,f] = 1;                                    # todas os caminhões de chegada serão descarregados em uma unica doca
+s.t. r2{f in F,l in L,m in L:l<m}: Wr[l,m]+Wr[m,l]>=Zr[l,f]+Zr[m,f]-1;       # defiene a ordem de precedência entre os caminhões de chegada, se l ou m vai ser descarregado primeiro 
+s.t. r3{l in L}: Ut[l]>=Pd[l]+r[l];                                          # instante em que o caminhão 'l' foi descarregado tem que ser maior que o tempo de descarga 
+s.t. r4{l in L,m in L:m<>l}: Ut[m] >= Ut[l] + Pd[m] -G*(1-Wr[l,m]);          # instante em que o caminhão 'm' termina de ser descarregado
+s.t. r5{k in K}: sum{h in H} Zo[k,h] = 1;                                    # todas os caminhões de entrega serão carregados em uma unica doca
+s.t. r6{h in H,k in K,q in K:k<q}: Wo[k,q]+Wo[q,k]>=Zo[k,h]+Zo[q,h]-1;       # define a ordem de precedência entre os caminhões de entrega, se k ou q vai ser carregado primeiro
+s.t. r7{k in K,q in K:q<>k}: Dt[q]>=Dt[k]+Pc[q]-G*(1-Wo[k,q]);               # instante em que o caminhão 'k' termina de ser carregado
+s.t. r8{k in K,l in L,e in E}: Dt[k]>=Ut[l]+ Pc[k]- G*(1-Q[e,l]*S[l,k]);     # atribuição dos produtos de chegada com os veiculos de entrega
+s.t. r9{k in K, e in E}:sum{l in L} v[e]*(Q[e,l]*S[l,k])<=C[k];              # o carregamento deve respeitar a capacidade de carga de cada veículo de entrega
+s.t. r10{e in E}:T[e]>=0;                                                    # tempo não negativo
+#  restrição fase 1
+s.t. r11{k in K, l in L, e in E}: T[e]>=Dt[k]-G*(1-Q[e,l]*S[l,k]);           # instante em que o produto 'e' sai para entrega sem considerar o atraso
+# restrições fase 2
+s.t. r12{k in K, l in L, e in E}: Dte[e]>=Dt[k]-G*(1-Q[e,l]*S[l,k]);         # instante em que o produto 'e' sai para entrega 
+s.t. r13{e in E}:T[e]>=Dte[e]-d[e];                                          # atraso na entrega do produto 'e'
+end;

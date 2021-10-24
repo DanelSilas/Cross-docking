@@ -1,0 +1,67 @@
+param pop;
+param opo;
+param tempo_gasto;
+model "fases.txt";
+data "Dados1.txt";
+#data "Dados2.txt";
+option solver cplex;
+option  display solver_msg ;
+
+printf"Fase 1 dados 1\n\n";
+let pop := time();
+problem prob1:T,Zr,Wr,Zo,Wo,Ut,Dt,fo,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11;
+solve prob1;
+let opo := time();
+let tempo_gasto := opo-pop;
+printf"tempo de resolução: %.5f s\n ", tempo_gasto;
+display T;
+
+printf"Fase 2 dados 1\n\n";
+let pop := time();
+problem prob2:T,Zr,Wr,Zo,Wo,Ut,Dt,Dte,fo2,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,r13;
+solve prob2;
+let opo := time();
+let tempo_gasto := opo-pop;
+printf"tempo de resolução: %.5f s\n ", tempo_gasto;
+display Dte;
+
+reset;
+
+#dados 2
+param pop;
+param opo;
+param tempo_gasto;
+model "fases.txt";
+data "Dados2.txt";
+option solver cplex;
+option  display solver_msg ;
+
+printf"Fase 1 dados 2\n\n";
+let pop := time();
+problem prob1:T,Zr,Wr,Zo,Wo,Ut,Dt,fo,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11;
+solve prob1;
+let opo := time();
+let tempo_gasto := opo-pop;
+printf"tempo de resolução: %.5f s\n ", tempo_gasto;
+display T;
+
+printf"Fase 2 dados 2\n\n";
+let pop := time();
+problem prob2:T,Zr,Wr,Zo,Wo,Ut,Dt,Dte,fo2,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r12,r13;
+solve prob2;
+let opo := time();
+let tempo_gasto := opo-pop;
+printf"tempo de resolução: %.5f s\n ", tempo_gasto;
+display Dte;
+
+reset;
+printf"\nHeuristica Construtiva para dados 1 fase 2 ";
+model "HConstParam.txt";
+data "Dados1.txt";
+model "HConstrutiva.txt"
+
+reset;
+printf"\nHeuristica Construtiva para dados 2 fase 2 ";
+model "HConstParam.txt";
+data "Dados2.txt";
+model "HConstrutiva.txt"

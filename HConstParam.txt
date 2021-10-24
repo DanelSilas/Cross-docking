@@ -1,0 +1,46 @@
+
+reset;
+
+##Parametros de definição
+param G:= 99999;  # G número muito grande 
+param n;          # n produtos(n)
+param nv1;        # l caminhão entrada (nv1)
+param nv2;        # k caminhão saída   (nv2)
+param maq1;       # maq1 docas de descarregamento (maq1)
+param maq2;       # maq2 docas de carregamento (maq2)
+
+##Conjuntos
+set K:={1..nv2}; # K conjunto de veículos de saída
+set L:={1..nv1}; # L conjunto de veículos de chegada
+set E:={1..n};   # E conjunto de produtos
+set F:={1..maq1};# F conjunto de docas de entrada
+set H:={1..maq2};# H conjunto de docas de saída
+
+##parametros do problema
+param Pc{K} default 0.0 ; # Pc tempo de processamento de carga (p)
+param Pd{L} default 0.0 ; # Pd tempo de processamento de descarga (p)
+param C{K} default 0.0 ;  # C capacidade de carga do veículo de entrega (K)
+param r{L} default 0.0 ;  # r data de disponibilidade de veículo de entrega(r)
+param w{E} default 0.0 ;  # w penalidade por atraso (w)
+param d{E} default 0.0 ;  # d data de entrega do produto (d)
+param v{E} default 0.0 ;  # v volume do produto(s)
+param Q{E,L} default 0.0 ;# S relação entre produtos e caminhões de chegada(s-n x nv1)
+param S{E,K} default 0.0 ;# relação entre produto e veiculos de entrega 
+param t{E} default 0.0 ;  # tempo de atraso
+param auxDec{E} default 0.0;# auxiliar decrescente de w
+param DecW{E} default 0.0;# ordem decrescente de w
+param ODecW{E} default 0.0;# ordem dos produtos
+param auxDecW{E} default 0.0;# ordem decrescente de w
+param auxODecW{E} default 0.0;# ordem decrescente de w indices 
+param auxC default 0.0;# auxiliar capacidade de k
+param auxe default 0.0;# auxiliar de E
+param aux default 0.0;# auxiliar de Calculo
+param auxid default 0.0;# auxiliar de indicador de posição
+param soma default 0.0;# soma de todos os atrasos e multiplicado pelo peso
+param auxmax default 0.0;# auxiliar decrescente de w
+param Re{E} default 0.0 ;  # r data de disponibilidade do produto E
+param pe{E} default 0.0 ; # tempo de processamento de descarga do produto e
+param UT{E} default 0.0; # instante em que o processamento de descarga que o produto e termina 
+param DT{E} default 0.0; # instante em que o processamento de carregamento do produto e termina
+
+end;

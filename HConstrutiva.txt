@@ -1,0 +1,103 @@
+#heurística construtiva 
+#ordem decrescente de w 
+
+for{e in E}{
+	for{b in L}{
+		if Q[e,b]==1 then{
+		let Re[e]:=r[b];
+		let pe[e]:=Pd[b];
+		};
+	} 
+}
+
+for {z in E}{
+	let auxDecW[z]:=w[z]*((Re[z]+pe[z])/d[z]);
+}
+	
+for {a in E}{
+ let auxmax:=0;
+ 	for {b in E}{
+ 		if auxDecW[b]>=auxmax then {
+ 			let auxmax := auxDecW[b];
+ 			let auxid := b;
+ 		};
+ 	} 
+ let DecW[a]:= auxDecW[auxid];
+ let ODecW[a]:=auxid;
+ let auxDecW[auxid]:= -1;
+}
+
+##atribuir as maquinas de descarga e carga a ordem decrescente de W
+
+for {a in E}{
+	let auxODecW[a]:=ODecW[a];
+}
+for { k in K}{
+   let auxC:=0;
+		repeat while (auxC + v[auxid] <= C[k] && sum{f in E} auxODecW[f]<>0){
+		let auxe:=auxe+1;
+		let auxid:=auxODecW[auxe];
+		let auxC:=auxC+v[auxid];
+		let auxODecW[auxe]:=0;
+		
+		};
+}
+## calcular tempo de atraso 
+for {a in E}{
+	for{l in L}{
+		if Q[a,l]>0 then { 
+		let Re[a]:=r[l];
+		let pe[a]:=Pd[l];
+		}
+	}
+}
+let auxe:=1;
+
+for {a in E}{
+	let auxODecW[a]:=ODecW[a];
+}
+for {a in E}{
+	let auxid:=auxODecW[a];
+	if UT[auxe]<Re[auxid] then{
+	let UT[auxid]:=Re[auxid]+pe[auxid];
+	}
+	else {
+	let UT[auxid]:=UT[auxe]+pe[auxid];
+	}
+	let auxe:=auxid;
+}
+for {b in L}{
+	for {k in K}{
+		if S[b,k]==1 then{
+		let DT[b]:=UT[b]+Pc[k];
+		let aux:= DT[b]-d[b];
+		if aux>0 then{
+			let t[b]:=aux;
+			}
+		}
+	}
+}
+for {a in E}{
+	let soma:= t[a]*w[a]+soma;
+}
+
+printf"\nsequencia dos pordutos\nOw";
+for {a in E}{
+	printf" %d ", ODecW[a];
+}
+printf"\nDt";
+for {a in E}{
+	printf" %d ", DT[a];
+}
+printf"\nS[L,k]";
+for {a in L}{
+	printf"\n";
+	for {k in K}{
+	printf" %d ",S[a,k];
+	}
+}
+#display X;
+printf"\n fo: %d \n", soma;
+
+end;
+
