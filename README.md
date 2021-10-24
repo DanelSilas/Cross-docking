@@ -34,6 +34,9 @@ prometida ponderando a importância de cada cliente (min WT).
 include run.txt
 ```
 ## Modelo Matemático
+![Capturar1](/imagem/Capturar1.PNG)
+![Capturar2](/imagem/Capturar2.PNG)
+![Capturar3](/imagem/Capturar3.PNG)
 (1) A função objetivo é minimizar o atraso na entrega dos produtos.
 (2) Todos os caminhões de chegadas serão descarregados em uma única doca.
 (3) Todos os caminhões de entrega serão carregados em uma única doca.
